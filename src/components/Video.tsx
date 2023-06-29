@@ -2,13 +2,10 @@ import ReactPlayer from "react-player";
 import { useAppSelector } from "../store";
 
 export function Video() {
-  const video = useAppSelector((state) => {
-    const { currentModuleIndex, currentLessonIndex } = state.player;
-
+  const lesson = useAppSelector((state) => {
+    const { course, currentModuleIndex, currentLessonIndex } = state.player;
     const currentLesson =
-      state.player.course.modules[currentModuleIndex].lessons[
-        currentLessonIndex
-      ];
+      course.modules[currentModuleIndex].lessons[currentLessonIndex];
 
     return currentLesson;
   });
@@ -19,7 +16,7 @@ export function Video() {
         width="100%"
         height="100%"
         controls
-        url={`https://www.youtube.com/watch?v=${video.id}`}
+        url={`https://www.youtube.com/watch?v=${lesson.id}`}
       />
     </div>
   );
