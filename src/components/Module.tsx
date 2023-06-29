@@ -1,7 +1,6 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { ChevronDown } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "../store";
-import { play } from "../store/slices/player";
+import { useStore } from "../zustand-store";
 import { Lesson } from "./Lesson";
 
 interface IModule {
@@ -11,14 +10,14 @@ interface IModule {
 }
 
 export function Module({ moduleIndex, title, amountOfLessons }: IModule) {
-  const dispatch = useAppDispatch();
-
-  const { lessons, currentModuleIndex, currentLessonIndex } = useAppSelector(
-    (state) => {
-      const { course, currentModuleIndex, currentLessonIndex } = state.player;
-      const lessons = course?.modules[moduleIndex].lessons;
-
-      return { lessons, currentModuleIndex, currentLessonIndex };
+  const { lessons, currentLessonIndex, currentModuleIndex, play } = useStore(
+    (store) => {
+      return {
+        lessons: store.course?.modules[moduleIndex].lessons,
+        currentLessonIndex: store.currentLessonIndex,
+        currentModuleIndex: store.currentModuleIndex,
+        play: store.play,
+      };
     }
   );
 
@@ -47,7 +46,7 @@ export function Module({ moduleIndex, title, amountOfLessons }: IModule) {
                 title={lesson.title}
                 duration={lesson.duration}
                 isCurrent={isCurrent}
-                onPlay={() => dispatch(play([moduleIndex, lessonIndex]))}
+                onPlay={() => play([moduleIndex, lessonIndex])}
               />
             );
           })}
